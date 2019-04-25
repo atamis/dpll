@@ -3,8 +3,7 @@
 
 (defn satisfied?
   [cfn]
-  (every? #(some identity %) cfn)
-  )
+  (every? #(some identity %) cfn))
 
 (defn all-bound?
   [cfn]
@@ -54,8 +53,7 @@
             value (if (vector? unit-variable) false true)
             name (if (vector? unit-variable)
                    (second unit-variable)
-                   unit-variable)
-            ]
+                   unit-variable)]
         (assign-variable cfn name value)))))
 
 (defn repeatedly-unit-propagate
@@ -70,27 +68,21 @@
   (let [var-clauses (->> cfn
                          (mapcat identity)
                          (filter (complement boolean?))
-                         (into #{})
-                         )
+                         (into #{}))
         normal-vars (->> var-clauses
                          (filter (complement vector?))
-                         (into #{})
-                         )
+                         (into #{}))
         inverted-vars (->> var-clauses
                            (filter vector?)
                            (map second)
-                           (into #{})
-                           )
+                           (into #{}))
         normal-pures (set/difference normal-vars inverted-vars)
-        inverted-pures (set/difference inverted-vars normal-vars)
-        ]
+        inverted-pures (set/difference inverted-vars normal-vars)]
     (assign-variables cfn (-> {}
                               (into (map (fn [v] [v true])
                                          normal-pures))
                               (into (map (fn [v] [v false])
-                                         inverted-pures))))
-    )
-  )
+                                         inverted-pures))))))
 
 (defn simplify
   [cfn]
@@ -103,9 +95,8 @@
   (let [cfn (-> cfn
                 (repeatedly-unit-propagate)
                 (assign-pure-literals)
-                (simplify)
-                )
-        ]
+                (simplify))]
+
     (cond
       (and (all-bound? cfn) (satisfied? cfn)) true
       (some empty? cfn) false
@@ -113,8 +104,4 @@
       (let [variables (unbound-variables cfn)
             variable (rand-nth (into [] variables))]
         (or (dpll (assign-variable cfn variable true))
-            (dpll (assign-variable cfn variable false))
-            )
-        )
-      ))
-  )
+            (dpll (assign-variable cfn variable false)))))))

@@ -28,13 +28,10 @@
 (t/deftest assign-variable-test
   (t/testing "normal operation"
     (t/is [[true false false]]
-          (d/assign-variable [[:a [:not :a] false]] :a true))
-    )
+          (d/assign-variable [[:a [:not :a] false]] :a true)))
   (t/testing "bulk operation"
     (t/is (= [[true false false]]
-             (d/assign-variables  [[:a [:not :a] :b]] {:a true :b false})))
-    )
-  )
+             (d/assign-variables  [[:a [:not :a] :b]] {:a true :b false})))))
 
 (t/deftest unit-clause-test
   (t/testing "normal operation"
@@ -48,17 +45,13 @@
     (t/is (= [[:a :b]] (d/simplify [[:a :b false]])))
     (t/is (= [[:a :b]] (d/simplify [[:a :b true]
                                     [:a :b false]])))
-    (t/is (= [[]] (d/simplify [[]])))
-
-    )
-  )
+    (t/is (= [[]] (d/simplify [[]])))))
 
 (t/deftest unit-propagate
   (t/testing "normal operation"
-    (t/is (= [[false true false]] (d/unit-propagate [[false :a false] ])))
-    (t/is (= [[true]] (d/unit-propagate [[[:not :a]] ])))
-    (t/is (= nil (d/unit-propagate [[:a :b] ])))
-    )
+    (t/is (= [[false true false]] (d/unit-propagate [[false :a false]])))
+    (t/is (= [[true]] (d/unit-propagate [[[:not :a]]])))
+    (t/is (= nil (d/unit-propagate [[:a :b]]))))
   (t/testing "repeatedly unit propagate"
     (t/is (= [[true] [true]]
              (d/repeatedly-unit-propagate [[:a] [:b]])))))
@@ -67,16 +60,13 @@
   (t/testing "normal operation"
     (t/is (= [[:a true] [[:not :a]]] (d/assign-pure-literals [[:a :b] [[:not :a]]])))
     (t/is (= [[:a true] [[:not :a]]] (d/assign-pure-literals
-                                      [[:a [:not :b]] [[:not :a]]])))
-    )
-  )
+                                      [[:a [:not :b]] [[:not :a]]])))))
 
 (t/deftest dpll-test
   (t/testing "termination"
     (t/is (d/dpll [[true false false] [false true false]])))
   (t/testing "unsatisfiable"
     (t/is (not (d/dpll [[true false false] []])))
-    (t/is (not (d/dpll [[:a] [[:not :a]]])))
-    )
+    (t/is (not (d/dpll [[:a] [[:not :a]]]))))
   (t/testing "normal-operation"
     (t/is (d/dpll [[:a :b] [[:not :a] :b]]))))
