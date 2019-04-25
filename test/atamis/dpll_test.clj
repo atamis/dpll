@@ -1,5 +1,5 @@
-(ns dpll.core-test
-  (:require [dpll.core :as d]
+(ns atamis.dpll-test
+  (:require [atamis.dpll :as d]
             [clojure.test :as t]))
 
 (t/deftest satisified-test

@@ -1,4 +1,4 @@
-(ns dpll.core
+(ns atamis.dpll
   (:require [clojure.set :as set]))
 
 (defn satisfied?

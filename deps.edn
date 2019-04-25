@@ -3,5 +3,5 @@
 
  :aliases
  {:test {:extra-paths ["test"]
-         :main-opts ["-m" "dpll.test"]
+         :main-opts ["-m" "atamis.dpll.test"]
          }}}
